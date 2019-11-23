@@ -12,14 +12,14 @@ class FleschOfFile{
 
         String fileName = args[0];
         //System.out.println(args[0]);
-        File tempFile = new File(fileName);
+        File fileToFlesch = new File(fileName);
 
-        if(!tempFile.exists()) {
+        if(!fileToFlesch.exists()) {
             System.out.println("Error. File doesnt exist.");
             return;
         }
 
-        ArrayList<Character> delimiters = new ArrayList<Character>(Arrays.asList('\'', ':', '(', ')', '*', '&', '^',
+        ArrayList<Character> delimiters = new ArrayList<Character>(Arrays.asList(' ', '.', ',', '\'', ':', '(', ')', '*', '&', '^',
                 '%', '$', '#', '@', '!', '_', '+', '-', '=', '[', ']', '{', '}', '?', ';'));
 
         ArrayList<Character> vowels = new ArrayList<Character>(Arrays.asList('a', 'e', 'i', 'o', 'u', 'y'));
@@ -28,21 +28,44 @@ class FleschOfFile{
 
         int wordCount = 0, syllablesCount = 0, sentencesCount = 0;
 
-        Reader fileReader = new FileReader(fileName);
+        Reader fileReader = new FileReader(fileToFlesch);
 
-        for (int data = fileReader.read(), lastData = -1; data != -1 ;
-             lastData = data, data = fileReader.read()){
-
-            if(vowels.contains(data) && !vowels.contains(lastData)){
-                syllablesCount++;
-            }
-            if(delimiters.contains(data) && !delimiters.contains(lastData)){
+        int data = fileReader.read();
+        int i=0;
+        boolean wordWithNoVowel = true, lastWasE = false;
+        for (char curData = (char)data, lastData = '0' ; data != -1 ;
+             lastData = curData, data = fileReader.read(), curData = (char)data){
+            //System.out.println(i++);
+            //System.out.println(curData);// + " cur");
+            //System.out.println(lastData + " last");
+            if(delimiters.contains(curData) && !delimiters.contains(lastData)){
+                if(lastData == 'e' && lastWasE){
+                    syllablesCount--;
+                }
+                if(wordWithNoVowel){
+                    syllablesCount++;
+                }
+                wordWithNoVowel = true;
+                System.out.println(33333333);
                 wordCount++;
             }
-            if(endSentence.contains(data) && !endSentence.contains(lastData)){
+            if(vowels.contains(curData) && !vowels.contains(lastData)){
+                lastWasE = (curData == 'e');
+                wordWithNoVowel = false;
+                syllablesCount++;
+            }
+            if(endSentence.contains(curData) && !endSentence.contains(lastData)){
+                System.out.println(222222);
                 sentencesCount++;
             }
         }
+
+        System.out.println(206.835);
+        System.out.println(84.6*syllablesCount/wordCount);
+        System.out.println(1.015*wordCount/sentencesCount);
+        System.out.println("syllables: " + syllablesCount);
+        System.out.println("words: " + wordCount);
+        System.out.println("sentences: " + sentencesCount);
         System.out.println(206.835 - 84.6*syllablesCount/wordCount - 1.015*wordCount/sentencesCount);
     }
 
