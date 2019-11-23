@@ -46,7 +46,6 @@ class FleschOfFile{
                     syllablesCount++;
                 }
                 wordWithNoVowel = true;
-                System.out.println(33333333);
                 wordCount++;
             }
             if(vowels.contains(curData) && !vowels.contains(lastData)){
@@ -55,14 +54,9 @@ class FleschOfFile{
                 syllablesCount++;
             }
             if(endSentence.contains(curData) && !endSentence.contains(lastData)){
-                System.out.println(222222);
                 sentencesCount++;
             }
         }
-
-        System.out.println(206.835);
-        System.out.println(84.6*syllablesCount/wordCount);
-        System.out.println(1.015*wordCount/sentencesCount);
         System.out.println("syllables: " + syllablesCount);
         System.out.println("words: " + wordCount);
         System.out.println("sentences: " + sentencesCount);
