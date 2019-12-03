@@ -31,32 +31,36 @@ class FleschOfFile{
         Reader fileReader = new FileReader(fileToFlesch);
 
         int data = fileReader.read();
-        int i=0;
-        boolean wordWithNoVowel = true, lastWasE = false;
+        //int i=0;
+        boolean wordWithNoVowel = true, lastWasE = false, vowlForE = false;
         for (char curData = (char)data, lastData = '0' ; data != -1 ;
              lastData = curData, data = fileReader.read(), curData = (char)data){
+//            if(lastData == '\n'){
+//                continue;
+//            }
             //System.out.println(i++);
             //System.out.println(curData);// + " cur");
             //System.out.println(lastData + " last");
             if(delimiters.contains(curData) && !delimiters.contains(lastData)){
                 if(lastData == 'e' && lastWasE){
-                    syllablesCount--;
+                    syllablesCount--;//-5584
                 }
                 if(wordWithNoVowel){
-                    syllablesCount++;
+                    syllablesCount++;//4243
                 }
                 wordWithNoVowel = true;
                 wordCount++;
             }
             if(vowels.contains(curData) && !vowels.contains(lastData)){
-                lastWasE = (curData == 'e');
+                lastWasE = (curData == 'e') && !wordWithNoVowel;
                 wordWithNoVowel = false;
-                syllablesCount++;
+                syllablesCount++;//84211
             }
             if(endSentence.contains(curData) && !endSentence.contains(lastData)){
                 sentencesCount++;
             }
         }
+        fileReader.close();
         System.out.println("syllables: " + syllablesCount);
         System.out.println("words: " + wordCount);
         System.out.println("sentences: " + sentencesCount);
